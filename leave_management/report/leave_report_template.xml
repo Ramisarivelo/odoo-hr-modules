@@ -1,0 +1,175 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+<template id="report_leave_attestation_template">
+    <t t-call="web.html_container">
+        <t t-foreach="docs" t-as="leave">
+            <t t-call="web.external_layout">
+                <div class="page">
+
+                    <!-- ══ EN-TÊTE ════════════════════════════════════════════ -->
+                    <div class="lm-report-header">
+                        <div class="row align-items-center">
+                            <div class="col-9">
+                                <h2>ATTESTATION DE CONGÉ</h2>
+                                <div class="lm-report-sub">
+                                    Référence : <strong><t t-esc="leave.reference"/></strong>
+                                    &amp;nbsp;·&amp;nbsp;
+                                    Émise le : <strong>
+                                        <t t-esc="context_today()" t-options="{'widget': 'date'}"/>
+                                    </strong>
+                                </div>
+                            </div>
+                            <div class="col-3 text-right">
+                                <span t-if="leave.state == 'approved'"
+                                      class="lm-stamp">✅ Approuvé</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="lm-report-body">
+
+                        <!-- ══ INFORMATIONS EMPLOYÉ ════════════════════════════ -->
+                        <div class="lm-report-section-title">👤 Informations de l'employé</div>
+                        <table class="table table-sm" style="font-size:0.88rem;">
+                            <tbody>
+                                <tr>
+                                    <td class="lm-report-field-label" style="width:30%;">Nom complet</td>
+                                    <td class="lm-report-field-value">
+                                        <t t-esc="leave.employee_id.name"/>
+                                    </td>
+                                    <td class="lm-report-field-label" style="width:25%;">Matricule</td>
+                                    <td class="lm-report-field-value">
+                                        <t t-esc="leave.employee_id.employee_ref or '—'"/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="lm-report-field-label">Département</td>
+                                    <td class="lm-report-field-value">
+                                        <t t-esc="leave.department_id.name or '—'"/>
+                                    </td>
+                                    <td class="lm-report-field-label">Poste</td>
+                                    <td class="lm-report-field-value">
+                                        <t t-esc="leave.employee_id.job_position_id.name or '—'"/>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                        <!-- ══ DÉTAILS DU CONGÉ ════════════════════════════════ -->
+                        <div class="lm-report-section-title">📅 Détails du congé</div>
+                        <table class="table table-sm" style="font-size:0.88rem;">
+                            <tbody>
+                                <tr>
+                                    <td class="lm-report-field-label" style="width:30%;">Type de congé</td>
+                                    <td class="lm-report-field-value" colspan="3">
+                                        <t t-esc="leave.leave_type_id.name"/>
+                                        (<t t-esc="leave.leave_type_id.code"/>)
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="lm-report-field-label">Date de début</td>
+                                    <td class="lm-report-field-value">
+                                        <t t-esc="leave.date_start" t-options="{'widget': 'date'}"/>
+                                    </td>
+                                    <td class="lm-report-field-label" style="width:25%;">Date de fin</td>
+                                    <td class="lm-report-field-value">
+                                        <t t-esc="leave.date_end" t-options="{'widget': 'date'}"/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="lm-report-field-label">Durée</td>
+                                    <td class="lm-report-field-value" colspan="3">
+                                        <strong><t t-esc="leave.number_of_days"/> jour(s)</strong>
+                                        <t t-if="leave.is_half_day">
+                                            — Demi-journée
+                                            (<t t-if="leave.half_day_period == 'morning'">Matin</t>
+                                             <t t-else="">Après-midi</t>)
+                                        </t>
+                                    </td>
+                                </tr>
+                                <tr t-if="leave.reason">
+                                    <td class="lm-report-field-label">Motif</td>
+                                    <td colspan="3" class="lm-report-field-value">
+                                        <t t-esc="leave.reason"/>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                        <!-- ══ TRAITEMENT DE LA DEMANDE ═══════════════════════ -->
+                        <div class="lm-report-section-title">✅ Traitement de la demande</div>
+                        <table class="table table-sm" style="font-size:0.88rem;">
+                            <tbody>
+                                <tr>
+                                    <td class="lm-report-field-label" style="width:30%;">Soumise le</td>
+                                    <td class="lm-report-field-value">
+                                        <t t-if="leave.submitted_date">
+                                            <t t-esc="leave.submitted_date" t-options="{'widget': 'datetime'}"/>
+                                        </t>
+                                        <t t-else="">—</t>
+                                    </td>
+                                    <td class="lm-report-field-label" style="width:25%;">Statut</td>
+                                    <td class="lm-report-field-value">
+                                        <t t-if="leave.state == 'approved'">
+                                            <span style="color:#1E8449; font-weight:700;">✅ APPROUVÉ</span>
+                                        </t>
+                                        <t t-elif="leave.state == 'refused'">
+                                            <span style="color:#C0392B; font-weight:700;">❌ REFUSÉ</span>
+                                        </t>
+                                        <t t-else="">
+                                            <t t-esc="leave.state"/>
+                                        </t>
+                                    </td>
+                                </tr>
+                                <tr t-if="leave.approved_by">
+                                    <td class="lm-report-field-label">Approuvé par</td>
+                                    <td class="lm-report-field-value">
+                                        <t t-esc="leave.approved_by.name"/>
+                                    </td>
+                                    <td class="lm-report-field-label">Le</td>
+                                    <td class="lm-report-field-value">
+                                        <t t-esc="leave.approved_date" t-options="{'widget': 'datetime'}"/>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                        <!-- ══ SIGNATURE ══════════════════════════════════════ -->
+                        <div class="row mt-5" style="font-size:0.88rem;">
+                            <div class="col-6 text-center">
+                                <div style="border-top: 1px solid #dee2e6; padding-top: 8px; margin-top: 40px;">
+                                    <span class="lm-report-field-label">Signature de l'employé</span><br/>
+                                    <strong><t t-esc="leave.employee_id.name"/></strong>
+                                </div>
+                            </div>
+                            <div class="col-6 text-center">
+                                <div style="border-top: 1px solid #dee2e6; padding-top: 8px; margin-top: 40px;">
+                                    <span class="lm-report-field-label">Cachet et signature RH</span><br/>
+                                    <t t-if="leave.approved_by">
+                                        <strong><t t-esc="leave.approved_by.name"/></strong>
+                                    </t>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- ══ PIED DE PAGE ══════════════════════════════════ -->
+                        <div class="mt-4 pt-3" style="border-top:1px solid #dee2e6; font-size:0.75rem; color:#7F8C8D;">
+                            <div class="row">
+                                <div class="col-6">
+                                    Document généré automatiquement le
+                                    <t t-esc="context_today()" t-options="{'widget': 'date'}"/>
+                                    — Module Leave Management
+                                </div>
+                                <div class="col-6 text-right">
+                                    <strong>DOCUMENT OFFICIEL</strong> — Usage interne et administratif
+                                </div>
+                            </div>
+                        </div>
+
+                    </div><!-- /lm-report-body -->
+                </div><!-- /page -->
+            </t>
+        </t>
+    </t>
+</template>
+</odoo>

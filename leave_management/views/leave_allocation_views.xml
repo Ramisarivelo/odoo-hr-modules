@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- ═══════════════════════════════════════════════════════════════ -->
+    <!--  LEAVE ALLOCATION VIEWS                                         -->
+    <!-- ═══════════════════════════════════════════════════════════════ -->
+
+    <!-- FORM VIEW -->
+    <record id="view_lm_leave_allocation_form" model="ir.ui.view">
+        <field name="name">lm.leave.allocation.form</field>
+        <field name="model">lm.leave.allocation</field>
+        <field name="arch" type="xml">
+            <form string="Allocation de Congé">
+                <header>
+                    <button name="action_approve" string="✅ Approuver" type="object"
+                            class="btn-success"
+                            attrs="{'invisible': [('state', '!=', 'draft')]}"
+                            groups="leave_management.group_leave_manager"
+                            confirm="Confirmer l'approbation de cette allocation ?"/>
+                    <button name="action_refuse" string="❌ Refuser" type="object"
+                            class="btn-danger"
+                            attrs="{'invisible': [('state', 'not in', ['draft', 'approved'])]}"
+                            groups="leave_management.group_leave_manager"/>
+                    <button name="action_reset_draft" string="🔄 Brouillon" type="object"
+                            attrs="{'invisible': [('state', '=', 'draft')]}"/>
+                    <field name="state" widget="statusbar"
+                           statusbar_visible="draft,approved"/>
+                </header>
+                <sheet>
+                    <div class="oe_title">
+                        <label for="display_name" string="Allocation"/>
+                        <h1><field name="display_name" readonly="1"/></h1>
+                    </div>
+                    <group>
+                        <group string="🎯 Attribution">
+                            <field name="employee_id"
+                                   attrs="{'readonly': [('state', '!=', 'draft')]}"/>
+                            <field name="department_id" readonly="1"/>
+                            <field name="leave_type_id"
+                                   attrs="{'readonly': [('state', '!=', 'draft')]}"/>
+                            <field name="number_of_days"
+                                   attrs="{'readonly': [('state', '!=', 'draft')]}"/>
+                        </group>
+                        <group string="📅 Période de validité">
+                            <field name="date_from"
+                                   attrs="{'readonly': [('state', '!=', 'draft')]}"/>
+                            <field name="date_to"
+                                   attrs="{'readonly': [('state', '!=', 'draft')]}"/>
+                        </group>
+                    </group>
+
+                    <!-- Indicateur de consommation (visible si approuvé) -->
+                    <group string="📊 Consommation"
+                           attrs="{'invisible': [('state', '!=', 'approved')]}">
+                        <group>
+                            <field name="days_used" readonly="1" widget="float"/>
+                            <field name="days_remaining" readonly="1" widget="float"
+                                   decoration-danger="days_remaining &lt; 0"
+                                   decoration-warning="days_remaining &lt; 5"
+                                   decoration-success="days_remaining &gt;= 5"/>
+                            <field name="usage_percentage" readonly="1" widget="float"
+                                   string="Taux d'utilisation (%)"/>
+                        </group>
+                    </group>
+
+                    <group string="📝 Note">
+                        <field name="note" nolabel="1"
+                               placeholder="Justification ou note interne..."
+                               attrs="{'readonly': [('state', '!=', 'draft')]}"/>
+                    </group>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids"/>
+                    <field name="activity_ids"/>
+                    <field name="message_ids"/>
+                </div>
+            </form>
+        </field>
+    </record>
+
+    <!-- TREE VIEW -->
+    <record id="view_lm_leave_allocation_tree" model="ir.ui.view">
+        <field name="name">lm.leave.allocation.tree</field>
+        <field name="model">lm.leave.allocation</field>
+        <field name="arch" type="xml">
+            <tree string="Allocations de Congé"
+                  decoration-success="state == 'approved'"
+                  decoration-danger="state == 'refused'"
+                  decoration-muted="state == 'draft'">
+                <field name="employee_id" string="Employé"/>
+                <field name="department_id" string="Département" optional="show"/>
+                <field name="leave_type_id" string="Type"/>
+                <field name="number_of_days" string="Alloués" widget="float"/>
+                <field name="days_used" string="Consommés" widget="float"/>
+                <field name="days_remaining" string="Restants" widget="float"
+                       decoration-danger="days_remaining &lt; 0"
+                       decoration-warning="days_remaining &lt; 5"
+                       decoration-success="days_remaining &gt;= 5"/>
+                <field name="date_from" string="Du"/>
+                <field name="date_to" string="Au"/>
+                <field name="state" string="Statut" widget="badge"
+                       decoration-success="state == 'approved'"
+                       decoration-danger="state == 'refused'"
+                       decoration-secondary="state == 'draft'"/>
+                <button name="action_approve" type="object" icon="fa-check"
+                        title="Approuver" class="text-success"
+                        attrs="{'invisible': [('state', '!=', 'draft')]}"
+                        groups="leave_management.group_leave_manager"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- SEARCH VIEW -->
+    <record id="view_lm_leave_allocation_search" model="ir.ui.view">
+        <field name="name">lm.leave.allocation.search</field>
+        <field name="model">lm.leave.allocation</field>
+        <field name="arch" type="xml">
+            <search string="Rechercher une allocation">
+                <field name="employee_id" string="Employé"/>
+                <field name="leave_type_id" string="Type de congé"/>
+                <field name="department_id" string="Département"/>
+                <separator/>
+                <filter name="f_draft"    string="Brouillons" domain="[('state', '=', 'draft')]"/>
+                <filter name="f_approved" string="Approuvées" domain="[('state', '=', 'approved')]"/>
+                <filter name="f_refused"  string="Refusées"   domain="[('state', '=', 'refused')]"/>
+                <filter name="f_low"      string="Solde faible (&lt; 5j)"
+                        domain="[('days_remaining', '&lt;', 5), ('state', '=', 'approved')]"/>
+                <group expand="1" string="Grouper par">
+                    <filter name="g_employee" string="Employé"       context="{'group_by': 'employee_id'}"/>
+                    <filter name="g_dept"     string="Département"   context="{'group_by': 'department_id'}"/>
+                    <filter name="g_type"     string="Type de congé" context="{'group_by': 'leave_type_id'}"/>
+                    <filter name="g_state"    string="Statut"        context="{'group_by': 'state'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <!-- ACTION -->
+    <record id="action_lm_leave_allocation" model="ir.actions.act_window">
+        <field name="name">Allocations de Congé</field>
+        <field name="res_model">lm.leave.allocation</field>
+        <field name="view_mode">tree,form</field>
+        <field name="search_view_id" ref="view_lm_leave_allocation_search"/>
+        <field name="context">{'search_default_f_approved': 1}</field>
+        <field name="groups_id" eval="[(4, ref('leave_management.group_leave_manager'))]"/>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">Aucune allocation créée.</p>
+            <p>Créez des allocations pour attribuer des quotas de congé aux employés.</p>
+        </field>
+    </record>
+
+</odoo>

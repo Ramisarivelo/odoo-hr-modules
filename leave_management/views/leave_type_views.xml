@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- ═══════════════════════════════════════════════════════════════ -->
+    <!--  LEAVE TYPE VIEWS                                              -->
+    <!-- ═══════════════════════════════════════════════════════════════ -->
+
+    <record id="view_lm_leave_type_form" model="ir.ui.view">
+        <field name="name">lm.leave.type.form</field>
+        <field name="model">lm.leave.type</field>
+        <field name="arch" type="xml">
+            <form string="Type de congé">
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button name="%(action_lm_leave_request)d"
+                                type="action"
+                                class="oe_stat_button"
+                                icon="fa-calendar"
+                                context="{'search_default_leave_type_id': active_id}">
+                            <field name="request_count" widget="statinfo" string="Demandes"/>
+                        </button>
+                    </div>
+                    <div class="oe_title">
+                        <label for="name"/>
+                        <h1><field name="name" placeholder="Ex: Congé Annuel"/></h1>
+                    </div>
+                    <group>
+                        <group string="Paramètres généraux">
+                            <field name="code"/>
+                            <field name="sequence"/>
+                            <field name="color" widget="color_picker"/>
+                            <field name="active" widget="boolean_toggle"/>
+                        </group>
+                        <group string="Règles">
+                            <field name="max_days"
+                                   help="Mettre 0 pour illimité"/>
+                            <field name="requires_justification" widget="boolean_toggle"/>
+                            <field name="requires_approval" widget="boolean_toggle"/>
+                        </group>
+                    </group>
+                    <group string="Description">
+                        <field name="description" nolabel="1"
+                               placeholder="Décrivez les conditions d'utilisation de ce type de congé..."/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_lm_leave_type_tree" model="ir.ui.view">
+        <field name="name">lm.leave.type.tree</field>
+        <field name="model">lm.leave.type</field>
+        <field name="arch" type="xml">
+            <tree string="Types de congé" editable="bottom">
+                <field name="sequence" widget="handle"/>
+                <field name="code"/>
+                <field name="name"/>
+                <field name="max_days"/>
+                <field name="requires_justification"/>
+                <field name="requires_approval"/>
+                <field name="request_count" string="Demandes"/>
+                <field name="active" invisible="1"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="action_lm_leave_type" model="ir.actions.act_window">
+        <field name="name">Types de congé</field>
+        <field name="res_model">lm.leave.type</field>
+        <field name="view_mode">tree,form</field>
+        <field name="groups_id" eval="[(4, ref('leave_management.group_leave_manager'))]"/>
+    </record>
+
+    <!-- Wizard de refus -->
+    <record id="view_lm_leave_refuse_wizard" model="ir.ui.view">
+        <field name="name">lm.leave.refuse.wizard.form</field>
+        <field name="model">lm.leave.refuse.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Motif du refus">
+                <group>
+                    <field name="leave_ids" widget="many2many_tags" readonly="1"/>
+                    <field name="refusal_reason"
+                           placeholder="Expliquez clairement la raison du refus. Ce motif sera communiqué à l'employé..."
+                           required="1"/>
+                </group>
+                <footer>
+                    <button name="action_confirm_refuse"
+                            type="object"
+                            string="Confirmer le refus"
+                            class="btn-danger"
+                            data-hotkey="q"/>
+                    <button string="Annuler" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+</odoo>

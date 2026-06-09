@@ -1,0 +1,11 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_em_department_reader,em.department reader,model_em_department,employee_management.group_em_reader,1,0,0,0
+access_em_department_manager,em.department manager,model_em_department,employee_management.group_em_manager,1,1,1,0
+access_em_department_admin,em.department admin,model_em_department,employee_management.group_em_admin,1,1,1,1
+access_em_job_position_reader,em.job.position reader,model_em_job_position,employee_management.group_em_reader,1,0,0,0
+access_em_job_position_manager,em.job.position manager,model_em_job_position,employee_management.group_em_manager,1,1,1,0
+access_em_job_position_admin,em.job.position admin,model_em_job_position,employee_management.group_em_admin,1,1,1,1
+access_em_employee_reader,em.employee reader,model_em_employee,employee_management.group_em_reader,1,0,0,0
+access_em_employee_manager,em.employee manager,model_em_employee,employee_management.group_em_manager,1,1,1,0
+access_em_employee_admin,em.employee admin,model_em_employee,employee_management.group_em_admin,1,1,1,1
+access_em_transfer_wizard_manager,em.transfer.wizard manager,model_em_transfer_wizard,employee_management.group_em_manager,1,1,1,1

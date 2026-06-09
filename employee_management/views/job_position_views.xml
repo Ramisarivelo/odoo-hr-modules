@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="view_em_job_position_form" model="ir.ui.view">
+        <field name="name">em.job.position.form</field>
+        <field name="model">em.job.position</field>
+        <field name="arch" type="xml">
+            <form string="Poste">
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button name="%(action_em_employee)d" type="action"
+                                class="oe_stat_button" icon="fa-users"
+                                context="{'search_default_job_position_id': active_id}">
+                            <field name="employee_count" widget="statinfo" string="Employés"/>
+                        </button>
+                    </div>
+                    <div class="oe_title">
+                        <label for="name" string="Intitulé du poste"/>
+                        <h1><field name="name" placeholder="Ex : Développeur Odoo Senior"/></h1>
+                    </div>
+                    <group>
+                        <group string="Classification">
+                            <field name="department_id"/>
+                            <field name="level"/>
+                            <field name="active" widget="boolean_toggle"/>
+                        </group>
+                        <group string="Grille salariale (Ar)"
+                               groups="employee_management.group_em_manager">
+                            <field name="salary_min"/>
+                            <field name="salary_max"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Description du poste">
+                            <field name="description"
+                                   placeholder="Décrivez les missions, responsabilités et livrables attendus..."/>
+                        </page>
+                        <page string="Compétences requises">
+                            <field name="requirements"
+                                   placeholder="Formation requise, expérience, langues, certifications..."/>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_em_job_position_tree" model="ir.ui.view">
+        <field name="name">em.job.position.tree</field>
+        <field name="model">em.job.position</field>
+        <field name="arch" type="xml">
+            <tree string="Postes" decoration-muted="active == False">
+                <field name="name"/>
+                <field name="department_id"/>
+                <field name="level"/>
+                <field name="salary_min" string="Min (Ar)"
+                       groups="employee_management.group_em_manager" optional="show"/>
+                <field name="salary_max" string="Max (Ar)"
+                       groups="employee_management.group_em_manager" optional="show"/>
+                <field name="employee_count" string="Effectif"/>
+                <field name="active" invisible="1"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_em_job_position_search" model="ir.ui.view">
+        <field name="name">em.job.position.search</field>
+        <field name="model">em.job.position</field>
+        <field name="arch" type="xml">
+            <search string="Rechercher un poste">
+                <field name="name"/>
+                <field name="department_id"/>
+                <separator/>
+                <filter name="active"   string="Actifs"   domain="[('active', '=', True)]"/>
+                <filter name="archived" string="Archivés" domain="[('active', '=', False)]"/>
+                <group expand="0" string="Grouper par">
+                    <filter name="g_dept"  string="Département" context="{'group_by': 'department_id'}"/>
+                    <filter name="g_level" string="Niveau"      context="{'group_by': 'level'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_em_job_position" model="ir.actions.act_window">
+        <field name="name">Postes</field>
+        <field name="res_model">em.job.position</field>
+        <field name="view_mode">tree,form</field>
+        <field name="search_view_id" ref="view_em_job_position_search"/>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">Créer votre premier poste !</p>
+        </field>
+    </record>
+
+</odoo>

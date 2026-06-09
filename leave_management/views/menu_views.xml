@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- ═══════════════════════════════════════════════════════════════ -->
+    <!--  MENUS — Leave Management                                       -->
+    <!-- ═══════════════════════════════════════════════════════════════ -->
+
+    <!-- Menu racine de l'application -->
+    <menuitem id="menu_lm_root"
+              name="Congés"
+              sequence="51"
+              web_icon="leave_management,static/description/icon.png"/>
+
+    <!-- ──── Section : Mes congés (employé) ──── -->
+    <menuitem id="menu_lm_my"
+              name="Mes Congés"
+              parent="menu_lm_root"
+              sequence="10"/>
+
+    <menuitem id="menu_lm_my_requests"
+              name="Mes demandes"
+              parent="menu_lm_my"
+              action="action_lm_my_leaves"
+              sequence="10"/>
+
+    <!-- ──── Section : Gestion (manager) ──── -->
+    <menuitem id="menu_lm_management"
+              name="Gestion"
+              parent="menu_lm_root"
+              sequence="20"
+              groups="leave_management.group_leave_manager"/>
+
+    <menuitem id="menu_lm_all_requests"
+              name="Toutes les demandes"
+              parent="menu_lm_management"
+              action="action_lm_leave_request"
+              sequence="10"
+              groups="leave_management.group_leave_manager"/>
+
+    <menuitem id="menu_lm_pending"
+              name="⏳ En attente d'approbation"
+              parent="menu_lm_management"
+              action="action_lm_pending_leaves"
+              sequence="20"
+              groups="leave_management.group_leave_manager"/>
+
+    <menuitem id="menu_lm_dashboard"
+              name="📊 Tableau de bord"
+              parent="menu_lm_management"
+              action="action_lm_leave_dashboard"
+              sequence="30"
+              groups="leave_management.group_leave_manager"/>
+
+    <!-- ──── Section : Configuration (manager) ──── -->
+    <menuitem id="menu_lm_config"
+              name="Configuration"
+              parent="menu_lm_root"
+              sequence="90"
+              groups="leave_management.group_leave_manager"/>
+
+    <menuitem id="menu_lm_leave_types"
+              name="Types de congé"
+              parent="menu_lm_config"
+              action="action_lm_leave_type"
+              sequence="10"
+              groups="leave_management.group_leave_manager"/>
+
+</odoo>

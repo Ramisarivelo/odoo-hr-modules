@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_em_transfer_wizard_form" model="ir.ui.view">
+        <field name="name">em.transfer.wizard.form</field>
+        <field name="model">em.transfer.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Mutation / Transfert d'employé">
+                <group string="Employé(s) concerné(s)">
+                    <field name="employee_ids" widget="many2many_tags" readonly="1"/>
+                    <field name="current_department_id" readonly="1"/>
+                </group>
+                <group string="Nouvelle affectation">
+                    <field name="transfer_date"/>
+                    <field name="new_department_id"/>
+                    <field name="new_job_position_id"/>
+                    <field name="new_salary" placeholder="Laisser vide pour ne pas modifier"/>
+                </group>
+                <group string="Motif de la mutation">
+                    <field name="reason" nolabel="1"
+                           placeholder="Ex : Promotion, réorganisation, demande de l'employé..."/>
+                </group>
+                <footer>
+                    <button name="action_confirm_transfer" type="object"
+                            string="✅ Confirmer la mutation"
+                            class="btn-primary" data-hotkey="q"/>
+                    <button string="Annuler" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+</odoo>

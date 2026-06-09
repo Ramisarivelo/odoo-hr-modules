@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <!-- Séquence pour les matricules employés -->
+        <record id="seq_employee" model="ir.sequence">
+            <field name="name">Séquence Employé</field>
+            <field name="code">em.employee</field>
+            <field name="prefix">EMP-</field>
+            <field name="padding">4</field>
+            <field name="number_next">1</field>
+            <field name="number_increment">1</field>
+        </record>
+
+        <!-- Départements par défaut -->
+        <record id="dept_informatique" model="em.department">
+            <field name="name">Informatique</field>
+            <field name="code">IT</field>
+            <field name="description">Département en charge des systèmes d'information</field>
+        </record>
+
+        <record id="dept_rh" model="em.department">
+            <field name="name">Ressources Humaines</field>
+            <field name="code">RH</field>
+            <field name="description">Gestion du capital humain</field>
+        </record>
+
+        <record id="dept_finance" model="em.department">
+            <field name="name">Finance et Comptabilité</field>
+            <field name="code">FIN</field>
+            <field name="description">Gestion financière et comptable</field>
+        </record>
+
+        <record id="dept_commercial" model="em.department">
+            <field name="name">Commercial</field>
+            <field name="code">COM</field>
+            <field name="description">Ventes et développement commercial</field>
+        </record>
+
+        <!-- Postes par défaut -->
+        <record id="job_dev" model="em.job.position">
+            <field name="name">Développeur Odoo</field>
+            <field name="department_id" ref="dept_informatique"/>
+            <field name="salary_min">800000</field>
+            <field name="salary_max">2000000</field>
+        </record>
+
+        <record id="job_chef_projet" model="em.job.position">
+            <field name="name">Chef de Projet</field>
+            <field name="department_id" ref="dept_informatique"/>
+            <field name="salary_min">1500000</field>
+            <field name="salary_max">3000000</field>
+        </record>
+
+        <record id="job_rh" model="em.job.position">
+            <field name="name">Chargé RH</field>
+            <field name="department_id" ref="dept_rh"/>
+            <field name="salary_min">700000</field>
+            <field name="salary_max">1500000</field>
+        </record>
+
+        <record id="job_comptable" model="em.job.position">
+            <field name="name">Comptable</field>
+            <field name="department_id" ref="dept_finance"/>
+            <field name="salary_min">800000</field>
+            <field name="salary_max">1800000</field>
+        </record>
+
+        <record id="job_commercial" model="em.job.position">
+            <field name="name">Commercial Terrain</field>
+            <field name="department_id" ref="dept_commercial"/>
+            <field name="salary_min">600000</field>
+            <field name="salary_max">1200000</field>
+        </record>
+    </data>
+</odoo>

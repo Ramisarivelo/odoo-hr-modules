@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+<template id="report_employee_card_template">
+    <t t-call="web.html_container">
+        <t t-foreach="docs" t-as="emp">
+            <t t-call="web.external_layout">
+                <div class="page">
+
+                    <!-- ══ En-tête ══════════════════════════════════════════ -->
+                    <div class="em-report-header mb-4">
+                        <div class="row align-items-center">
+                            <div class="col-2 text-center">
+                                <t t-if="emp.image">
+                                    <img t-att-src="image_data_uri(emp.image)"
+                                         style="width:80px; height:80px; border-radius:50%; border:3px solid rgba(255,255,255,0.5); object-fit:cover;"/>
+                                </t>
+                                <t t-else="">
+                                    <div style="width:80px; height:80px; border-radius:50%; background:rgba(255,255,255,0.2); display:flex; align-items:center; justify-content:center; font-size:2.5rem; margin: 0 auto;">👤</div>
+                                </t>
+                            </div>
+                            <div class="col-10 text-white">
+                                <h2 class="mb-0" style="font-weight:800;"><t t-esc="emp.name"/></h2>
+                                <div style="opacity:0.85; font-size:0.95rem;">
+                                    <t t-esc="emp.job_position_id.name"/> — <t t-esc="emp.department_id.name"/>
+                                </div>
+                                <div style="margin-top:6px;">
+                                    <span style="background:rgba(255,255,255,0.2); border-radius:12px; padding:2px 12px; font-size:0.8rem; font-weight:700;">
+                                        <t t-esc="emp.employee_ref"/>
+                                    </span>
+                                    <span t-if="emp.state == 'active'"
+                                          style="margin-left:8px; background:#27ae60; border-radius:12px; padding:2px 12px; font-size:0.8rem; font-weight:700;">
+                                        ✅ ACTIF
+                                    </span>
+                                    <span t-if="emp.state == 'draft'"
+                                          style="margin-left:8px; background:rgba(255,255,255,0.3); border-radius:12px; padding:2px 12px; font-size:0.8rem; font-weight:700;">
+                                        BROUILLON
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- ══ Informations personnelles ════════════════════════ -->
+                    <div class="em-report-section-title">📋 Informations Personnelles</div>
+                    <table class="table table-sm" style="font-size:0.88rem;">
+                        <tbody>
+                            <tr>
+                                <td class="em-report-field-label" style="width:35%;">Genre</td>
+                                <td class="em-report-field-value">
+                                    <t t-if="emp.gender == 'male'">Masculin</t>
+                                    <t t-elif="emp.gender == 'female'">Féminin</t>
+                                    <t t-else="">—</t>
+                                </td>
+                                <td class="em-report-field-label" style="width:35%;">Date de naissance</td>
+                                <td class="em-report-field-value">
+                                    <t t-if="emp.date_of_birth">
+                                        <t t-esc="emp.date_of_birth" t-options="{'widget': 'date'}"/>
+                                        (<t t-esc="emp.age"/> ans)
+                                    </t>
+                                    <t t-else="">—</t>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="em-report-field-label">Nationalité</td>
+                                <td class="em-report-field-value"><t t-esc="emp.nationality or '—'"/></td>
+                                <td class="em-report-field-label">CIN</td>
+                                <td class="em-report-field-value"><t t-esc="emp.cin or '—'"/></td>
+                            </tr>
+                            <tr>
+                                <td class="em-report-field-label">Situation familiale</td>
+                                <td class="em-report-field-value"><t t-esc="dict(emp.fields_get(['marital_status'])['marital_status']['selection']).get(emp.marital_status, '—')"/></td>
+                                <td class="em-report-field-label">Nb. d'enfants</td>
+                                <td class="em-report-field-value"><t t-esc="emp.children_count"/></td>
+                            </tr>
+                            <tr>
+                                <td class="em-report-field-label">Adresse</td>
+                                <td colspan="3" class="em-report-field-value"><t t-esc="emp.address or '—'"/></td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <!-- ══ Contact ══════════════════════════════════════════ -->
+                    <div class="em-report-section-title">📞 Contact</div>
+                    <table class="table table-sm" style="font-size:0.88rem;">
+                        <tbody>
+                            <tr>
+                                <td class="em-report-field-label" style="width:35%;">Téléphone</td>
+                                <td class="em-report-field-value"><t t-esc="emp.phone or '—'"/></td>
+                                <td class="em-report-field-label" style="width:30%;">Mobile</td>
+                                <td class="em-report-field-value"><t t-esc="emp.mobile or '—'"/></td>
+                            </tr>
+                            <tr>
+                                <td class="em-report-field-label">Email pro</td>
+                                <td class="em-report-field-value"><t t-esc="emp.email or '—'"/></td>
+                                <td class="em-report-field-label">Email personnel</td>
+                                <td class="em-report-field-value"><t t-esc="emp.email_personal or '—'"/></td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <!-- ══ Informations professionnelles ════════════════════ -->
+                    <div class="em-report-section-title">🏢 Informations Professionnelles</div>
+                    <table class="table table-sm" style="font-size:0.88rem;">
+                        <tbody>
+                            <tr>
+                                <td class="em-report-field-label" style="width:35%;">Département</td>
+                                <td class="em-report-field-value"><t t-esc="emp.department_id.name or '—'"/></td>
+                                <td class="em-report-field-label" style="width:30%;">Poste</td>
+                                <td class="em-report-field-value"><t t-esc="emp.job_position_id.name or '—'"/></td>
+                            </tr>
+                            <tr>
+                                <td class="em-report-field-label">Manager direct</td>
+                                <td class="em-report-field-value"><t t-esc="emp.manager_id.name or '—'"/></td>
+                                <td class="em-report-field-label">Lieu de travail</td>
+                                <td class="em-report-field-value">
+                                    <t t-if="emp.work_location == 'office'">Présentiel</t>
+                                    <t t-elif="emp.work_location == 'remote'">Télétravail</t>
+                                    <t t-elif="emp.work_location == 'hybrid'">Hybride</t>
+                                    <t t-else="">—</t>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="em-report-field-label">Date d'embauche</td>
+                                <td class="em-report-field-value">
+                                    <t t-esc="emp.hiring_date" t-options="{'widget': 'date'}"/>
+                                </td>
+                                <td class="em-report-field-label">Ancienneté</td>
+                                <td class="em-report-field-value">
+                                    <t t-esc="emp.seniority"/> an(s) (<t t-esc="emp.seniority_months"/> mois)
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="em-report-field-label">Type de contrat</td>
+                                <td class="em-report-field-value">
+                                    <t t-esc="dict(emp.fields_get(['contract_type'])['contract_type']['selection']).get(emp.contract_type, '—')"/>
+                                </td>
+                                <td class="em-report-field-label">Fin de contrat</td>
+                                <td class="em-report-field-value">
+                                    <t t-if="emp.end_date">
+                                        <t t-esc="emp.end_date" t-options="{'widget': 'date'}"/>
+                                    </t>
+                                    <t t-else="">Sans terme fixé</t>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <!-- ══ Compétences ══════════════════════════════════════ -->
+                    <t t-if="emp.skills">
+                        <div class="em-report-section-title">🎯 Compétences</div>
+                        <p style="font-size:0.88rem; white-space: pre-line;"><t t-esc="emp.skills"/></p>
+                    </t>
+
+                    <!-- ══ Pied de page ══════════════════════════════════════ -->
+                    <div class="mt-5 pt-3" style="border-top:1px solid #dee2e6; font-size:0.75rem; color:#6c757d;">
+                        <div class="row">
+                            <div class="col-6">
+                                Document généré le
+                                <t t-esc="context_today()" t-options="{'widget': 'date'}"/>
+                            </div>
+                            <div class="col-6 text-right">
+                                <strong>CONFIDENTIEL</strong> — Usage interne uniquement
+                            </div>
+                        </div>
+                    </div>
+
+                </div><!-- /page -->
+            </t>
+        </t>
+    </t>
+</template>
+</odoo>

@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <record id="leave_type_annual" model="lm.leave.type">
+            <field name="name">Congé Annuel</field>
+            <field name="code">CA</field>
+            <field name="max_days">30</field>
+            <field name="requires_justification">False</field>
+            <field name="requires_approval">True</field>
+            <field name="color">10</field>
+            <field name="sequence">1</field>
+            <field name="description">Congé annuel payé — 30 jours maximum par année.</field>
+        </record>
+
+        <record id="leave_type_sick" model="lm.leave.type">
+            <field name="name">Congé Maladie</field>
+            <field name="code">CM</field>
+            <field name="max_days">90</field>
+            <field name="requires_justification">True</field>
+            <field name="requires_approval">True</field>
+            <field name="color">1</field>
+            <field name="sequence">2</field>
+            <field name="description">Congé maladie — certificat médical obligatoire au-delà de 2 jours.</field>
+        </record>
+
+        <record id="leave_type_maternity" model="lm.leave.type">
+            <field name="name">Congé Maternité</field>
+            <field name="code">CMat</field>
+            <field name="max_days">98</field>
+            <field name="requires_justification">True</field>
+            <field name="requires_approval">True</field>
+            <field name="color">6</field>
+            <field name="sequence">3</field>
+            <field name="description">Congé maternité légal — 14 semaines (98 jours).</field>
+        </record>
+
+        <record id="leave_type_exceptional" model="lm.leave.type">
+            <field name="name">Congé Exceptionnel</field>
+            <field name="code">CE</field>
+            <field name="max_days">5</field>
+            <field name="requires_justification">True</field>
+            <field name="requires_approval">True</field>
+            <field name="color">3</field>
+            <field name="sequence">4</field>
+            <field name="description">Événements familiaux : mariage, décès, naissance.</field>
+        </record>
+
+        <record id="leave_type_rtt" model="lm.leave.type">
+            <field name="name">RTT</field>
+            <field name="code">RTT</field>
+            <field name="max_days">20</field>
+            <field name="requires_justification">False</field>
+            <field name="requires_approval">True</field>
+            <field name="color">11</field>
+            <field name="sequence">5</field>
+            <field name="description">Réduction du temps de travail.</field>
+        </record>
+    </data>
+</odoo>
