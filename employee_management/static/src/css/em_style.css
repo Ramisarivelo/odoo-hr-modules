@@ -1,0 +1,245 @@
+/* ═══════════════════════════════════════════════════════════════════════
+   Employee Management — Custom Styles
+   Module: employee_management
+   ═══════════════════════════════════════════════════════════════════════ */
+
+/* ── Variables ─────────────────────────────────────────────────────── */
+:root {
+    --em-primary:     #2C3E6B;
+    --em-accent:      #4F8EF7;
+    --em-success:     #27ae60;
+    --em-warning:     #f39c12;
+    --em-danger:      #e74c3c;
+    --em-muted:       #95a5a6;
+    --em-bg-light:    #f0f4ff;
+    --em-card-radius: 12px;
+    --em-shadow:      0 2px 12px rgba(44, 62, 107, 0.10);
+}
+
+/* ── Page header de la fiche employé ───────────────────────────────── */
+.o_form_view .o_form_sheet .oe_title {
+    background: linear-gradient(135deg, var(--em-primary) 0%, #4a6fa5 100%);
+    color: #fff;
+    border-radius: var(--em-card-radius) var(--em-card-radius) 0 0;
+    padding: 24px 28px 20px;
+    margin: -16px -16px 20px;
+}
+
+.o_form_view .o_form_sheet .oe_title h1 .o_field_widget input,
+.o_form_view .o_form_sheet .oe_title h1 .o_field_char {
+    color: #fff !important;
+    font-size: 1.8rem;
+    font-weight: 700;
+}
+
+.o_form_view .o_form_sheet .oe_title label {
+    color: rgba(255,255,255,0.7) !important;
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+}
+
+/* Matricule badge dans le titre */
+.em-ref-badge {
+    display: inline-block;
+    background: rgba(255,255,255,0.18);
+    color: #fff;
+    border-radius: 20px;
+    padding: 2px 12px;
+    font-size: 0.78rem;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    margin-top: 4px;
+}
+
+/* ── Avatar dans le header ─────────────────────────────────────────── */
+.o_form_view .oe_avatar {
+    border: 3px solid rgba(255,255,255,0.5);
+    border-radius: 50%;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.18);
+    transition: transform 0.2s;
+}
+.o_form_view .oe_avatar:hover {
+    transform: scale(1.04);
+}
+
+/* ── Smart Buttons (stat boxes) ────────────────────────────────────── */
+.o_form_view .oe_button_box .oe_stat_button {
+    border-radius: 10px !important;
+    border: 1.5px solid #e2e8f7 !important;
+    transition: all 0.2s ease;
+    background: #fff;
+}
+.o_form_view .oe_button_box .oe_stat_button:hover {
+    border-color: var(--em-accent) !important;
+    background: var(--em-bg-light) !important;
+    transform: translateY(-2px);
+    box-shadow: var(--em-shadow);
+}
+.o_form_view .oe_button_box .oe_stat_button .o_stat_value {
+    color: var(--em-primary);
+    font-weight: 700;
+    font-size: 1.4rem;
+}
+
+/* ── Groups / sections ─────────────────────────────────────────────── */
+.o_form_view .o_group .o_wrap_label label {
+    color: #5a6a7e;
+    font-weight: 600;
+    font-size: 0.82rem;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+}
+
+/* ── Notebook (onglets) ────────────────────────────────────────────── */
+.o_form_view .o_notebook .nav-link {
+    border-radius: 8px 8px 0 0;
+    font-weight: 600;
+    color: #5a6a7e;
+    transition: all 0.15s;
+}
+.o_form_view .o_notebook .nav-link.active {
+    color: var(--em-primary);
+    border-bottom: 3px solid var(--em-accent);
+    background: var(--em-bg-light);
+}
+
+/* ── Status bar ────────────────────────────────────────────────────── */
+.o_statusbar_status button.o_arrow_button {
+    border-radius: 0 !important;
+    font-weight: 600;
+    transition: background 0.2s;
+}
+.o_statusbar_status button.o_arrow_button.btn-primary {
+    background: var(--em-accent) !important;
+    border-color: var(--em-accent) !important;
+}
+
+/* ── Tree view : lignes colorées ───────────────────────────────────── */
+.o_data_row.o_em_active td { color: var(--em-success); }
+.o_data_row.o_em_suspended td { color: var(--em-warning); }
+.o_data_row.o_em_resigned td { color: var(--em-danger); opacity: 0.75; }
+.o_data_row.o_em_draft td { color: var(--em-muted); }
+
+/* ── Kanban cards ──────────────────────────────────────────────────── */
+.o_em_kanban_card {
+    border-radius: var(--em-card-radius);
+    box-shadow: var(--em-shadow);
+    transition: transform 0.2s, box-shadow 0.2s;
+    border-left: 4px solid var(--em-accent);
+    overflow: hidden;
+}
+.o_em_kanban_card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 24px rgba(44, 62, 107, 0.16);
+}
+.o_em_kanban_card .em-card-header {
+    background: linear-gradient(135deg, var(--em-primary), #4a6fa5);
+    padding: 12px 14px 10px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+.o_em_kanban_card .em-card-header .em-avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    border: 2px solid rgba(255,255,255,0.5);
+    object-fit: cover;
+    background: rgba(255,255,255,0.2);
+}
+.o_em_kanban_card .em-card-header .em-name {
+    color: #fff;
+    font-weight: 700;
+    font-size: 0.95rem;
+    flex: 1;
+}
+.o_em_kanban_card .em-card-body {
+    padding: 12px 14px;
+    background: #fff;
+}
+.o_em_kanban_card .em-info-row {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.82rem;
+    color: #5a6a7e;
+    margin-bottom: 4px;
+}
+.o_em_kanban_card .em-info-row i {
+    width: 14px;
+    color: var(--em-accent);
+}
+
+/* Badge statut dans les kanban cards */
+.em-badge {
+    display: inline-block;
+    padding: 2px 10px;
+    border-radius: 12px;
+    font-size: 0.72rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+.em-badge.active   { background: #d4edda; color: #155724; }
+.em-badge.draft    { background: #e2e8f7; color: #2C3E6B; }
+.em-badge.suspended{ background: #fff3cd; color: #856404; }
+.em-badge.resigned { background: #f8d7da; color: #721c24; }
+
+/* ── Dashboard tiles ───────────────────────────────────────────────── */
+.em-dashboard-tile {
+    border-radius: var(--em-card-radius);
+    padding: 24px 20px;
+    color: #fff;
+    box-shadow: var(--em-shadow);
+    transition: transform 0.2s;
+    cursor: pointer;
+}
+.em-dashboard-tile:hover { transform: translateY(-3px); }
+.em-dashboard-tile .em-tile-value {
+    font-size: 2.5rem;
+    font-weight: 800;
+    line-height: 1;
+}
+.em-dashboard-tile .em-tile-label {
+    font-size: 0.85rem;
+    opacity: 0.85;
+    margin-top: 6px;
+}
+.em-tile-blue    { background: linear-gradient(135deg, #2C3E6B, #4F8EF7); }
+.em-tile-green   { background: linear-gradient(135deg, #1a7a4a, #27ae60); }
+.em-tile-orange  { background: linear-gradient(135deg, #b8620a, #f39c12); }
+.em-tile-red     { background: linear-gradient(135deg, #8e1a1a, #e74c3c); }
+
+/* ── Rapport PDF ────────────────────────────────────────────────────── */
+.em-report-header {
+    background: linear-gradient(135deg, var(--em-primary), #4a6fa5);
+    color: white;
+    padding: 20px;
+    border-radius: 8px 8px 0 0;
+}
+.em-report-section-title {
+    color: var(--em-primary);
+    border-bottom: 2px solid var(--em-accent);
+    padding-bottom: 6px;
+    margin-top: 20px;
+    font-weight: 700;
+    font-size: 0.95rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+.em-report-field-label {
+    color: #6c757d;
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+}
+.em-report-field-value {
+    font-weight: 600;
+    color: #2c3e50;
+}
+
+/* ── Alertes dans les formulaires ──────────────────────────────────── */
+.em-alert-active   { background: #d4edda; border-left: 4px solid var(--em-success); padding: 10px 14px; border-radius: 6px; }
+.em-alert-suspended{ background: #fff3cd; border-left: 4px solid var(--em-warning); padding: 10px 14px; border-radius: 6px; }
+.em-alert-resigned { background: #f8d7da; border-left: 4px solid var(--em-danger);  padding: 10px 14px; border-radius: 6px; }

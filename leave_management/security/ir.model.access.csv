@@ -1,0 +1,7 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_lm_leave_type_manager,lm.leave.type manager,model_lm_leave_type,leave_management.group_leave_manager,1,1,1,1
+access_lm_leave_type_employee,lm.leave.type employee,model_lm_leave_type,leave_management.group_leave_employee,1,0,0,0
+access_lm_leave_request_manager,lm.leave.request manager,model_lm_leave_request,leave_management.group_leave_manager,1,1,1,1
+access_lm_leave_request_employee,lm.leave.request employee,model_lm_leave_request,leave_management.group_leave_employee,1,1,1,0
+access_lm_leave_refuse_wizard_manager,lm.leave.refuse.wizard manager,model_lm_leave_refuse_wizard,leave_management.group_leave_manager,1,1,1,1
+access_lm_leave_refuse_wizard_employee,lm.leave.refuse.wizard employee,model_lm_leave_refuse_wizard,leave_management.group_leave_employee,1,1,1,1

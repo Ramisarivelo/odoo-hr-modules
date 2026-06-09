@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- ═══════════════════════════════════════════════════════════════ -->
+    <!--  MENUS — Employee Management                                   -->
+    <!-- ═══════════════════════════════════════════════════════════════ -->
+
+    <!-- Menu racine -->
+    <menuitem id="menu_em_root"
+              name="Gestion RH"
+              sequence="50"
+              web_icon="employee_management,static/description/icon.png"/>
+
+    <!-- ──── Section : Employés ──── -->
+    <menuitem id="menu_em_employees_section"
+              name="Employés"
+              parent="menu_em_root"
+              sequence="10"/>
+
+    <menuitem id="menu_em_employee_active"
+              name="Employés actifs"
+              parent="menu_em_employees_section"
+              action="action_em_employee"
+              sequence="10"/>
+
+    <menuitem id="menu_em_employee_all"
+              name="Tous les employés"
+              parent="menu_em_employees_section"
+              action="action_em_employee_all"
+              sequence="20"/>
+
+    <!-- ──── Section : Reporting (manager) ──── -->
+    <menuitem id="menu_em_reporting"
+              name="Reporting"
+              parent="menu_em_root"
+              sequence="80"
+              groups="employee_management.group_em_manager"/>
+
+    <menuitem id="menu_em_dashboard"
+              name="📊 Tableau de bord"
+              parent="menu_em_reporting"
+              action="action_em_dashboard"
+              sequence="10"
+              groups="employee_management.group_em_manager"/>
+
+    <menuitem id="menu_em_stats_contract"
+              name="📈 Répartition par contrat"
+              parent="menu_em_reporting"
+              action="action_em_stats_contract"
+              sequence="20"
+              groups="employee_management.group_em_manager"/>
+
+    <!-- ──── Section : Configuration (admin) ──── -->
+    <menuitem id="menu_em_config"
+              name="Configuration"
+              parent="menu_em_root"
+              sequence="90"
+              groups="employee_management.group_em_manager"/>
+
+    <menuitem id="menu_em_department"
+              name="Départements"
+              parent="menu_em_config"
+              action="action_em_department"
+              sequence="10"/>
+
+    <menuitem id="menu_em_job_position"
+              name="Postes"
+              parent="menu_em_config"
+              action="action_em_job_position"
+              sequence="20"/>
+
+</odoo>

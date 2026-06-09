@@ -1,0 +1,355 @@
+/* ═══════════════════════════════════════════════════════════════════════
+   Leave Management — Custom Backend Styles
+   Module : leave_management / static/src/css/lm_style.css
+   ═══════════════════════════════════════════════════════════════════════ */
+
+/* ── Variables de couleur ────────────────────────────────────────────── */
+:root {
+    --lm-primary:      #1B4F72;
+    --lm-accent:       #2E86C1;
+    --lm-success:      #1E8449;
+    --lm-warning:      #D68910;
+    --lm-danger:       #C0392B;
+    --lm-purple:       #7D3C98;
+    --lm-muted:        #717D7E;
+    --lm-bg:           #EBF5FB;
+    --lm-card-radius:  12px;
+    --lm-shadow:       0 3px 14px rgba(27, 79, 114, 0.12);
+    --lm-shadow-hover: 0 8px 28px rgba(27, 79, 114, 0.20);
+}
+
+/* ═══════════════════════════════════════════════════════════════════════
+   FORM VIEW — En-tête de fiche demande de congé
+   ═══════════════════════════════════════════════════════════════════════ */
+
+.o_form_view .o_form_sheet .oe_title {
+    background: linear-gradient(135deg, var(--lm-primary) 0%, var(--lm-accent) 100%);
+    color: #fff;
+    border-radius: var(--lm-card-radius) var(--lm-card-radius) 0 0;
+    padding: 22px 28px 18px;
+    margin: -16px -16px 20px;
+}
+
+.o_form_view .o_form_sheet .oe_title h1 .o_field_widget input,
+.o_form_view .o_form_sheet .oe_title h1 .o_field_char {
+    color: #fff !important;
+    font-size: 1.7rem;
+    font-weight: 800;
+}
+
+.o_form_view .o_form_sheet .oe_title label {
+    color: rgba(255,255,255,0.7) !important;
+    font-size: 0.78rem;
+    text-transform: uppercase;
+    letter-spacing: 0.07em;
+}
+
+/* Badge référence dans le titre */
+.lm-ref-badge {
+    display: inline-block;
+    background: rgba(255,255,255,0.18);
+    color: #fff;
+    border-radius: 20px;
+    padding: 2px 14px;
+    font-size: 0.8rem;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    margin-top: 4px;
+    border: 1px solid rgba(255,255,255,0.3);
+}
+
+/* ═══════════════════════════════════════════════════════════════════════
+   ALERTES / BANDEAUX D'ÉTAT
+   ═══════════════════════════════════════════════════════════════════════ */
+
+.lm-alert {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 16px;
+    border-radius: 8px;
+    margin-bottom: 16px;
+    font-weight: 600;
+    font-size: 0.9rem;
+}
+.lm-alert-pending   { background: #FEF9E7; border-left: 4px solid var(--lm-warning); color: #7D6608; }
+.lm-alert-approved  { background: #EAFAF1; border-left: 4px solid var(--lm-success); color: #1E6820; }
+.lm-alert-refused   { background: #FDEDEC; border-left: 4px solid var(--lm-danger);  color: #922B21; }
+.lm-alert-cancelled { background: #F2F3F4; border-left: 4px solid var(--lm-muted);   color: #424949; }
+
+/* ═══════════════════════════════════════════════════════════════════════
+   SMART BUTTONS (stat boxes)
+   ═══════════════════════════════════════════════════════════════════════ */
+
+.o_form_view .oe_button_box .oe_stat_button {
+    border-radius: 10px !important;
+    border: 1.5px solid #D4E6F1 !important;
+    transition: all 0.2s ease;
+    background: #fff;
+}
+.o_form_view .oe_button_box .oe_stat_button:hover {
+    border-color: var(--lm-accent) !important;
+    background: var(--lm-bg) !important;
+    transform: translateY(-2px);
+    box-shadow: var(--lm-shadow);
+}
+.o_form_view .oe_button_box .oe_stat_button .o_stat_value {
+    color: var(--lm-primary);
+    font-weight: 800;
+    font-size: 1.35rem;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════
+   NOTEBOOK (onglets)
+   ═══════════════════════════════════════════════════════════════════════ */
+
+.o_form_view .o_notebook .nav-link {
+    border-radius: 8px 8px 0 0;
+    font-weight: 600;
+    color: #566573;
+    transition: all 0.15s;
+}
+.o_form_view .o_notebook .nav-link.active {
+    color: var(--lm-primary);
+    border-bottom: 3px solid var(--lm-accent);
+    background: var(--lm-bg);
+}
+
+/* ═══════════════════════════════════════════════════════════════════════
+   BARRE DE STATUT
+   ═══════════════════════════════════════════════════════════════════════ */
+
+.o_statusbar_status button.o_arrow_button {
+    font-weight: 600;
+    transition: background 0.2s;
+}
+.o_statusbar_status button.o_arrow_button.btn-primary {
+    background: var(--lm-accent) !important;
+    border-color: var(--lm-accent) !important;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════
+   TREE VIEW — Coloration des lignes selon statut
+   ═══════════════════════════════════════════════════════════════════════ */
+
+.o_data_row.o_lm_pending   td { color: var(--lm-warning); font-weight: 600; }
+.o_data_row.o_lm_approved  td { color: var(--lm-success); }
+.o_data_row.o_lm_refused   td { color: var(--lm-danger); opacity: 0.8; }
+.o_data_row.o_lm_cancelled td { color: var(--lm-muted); text-decoration: line-through; }
+.o_data_row.o_lm_draft     td { color: #85929E; }
+
+/* ═══════════════════════════════════════════════════════════════════════
+   KANBAN CARDS — Demandes de congé
+   ═══════════════════════════════════════════════════════════════════════ */
+
+.o_lm_kanban_card {
+    border-radius: var(--lm-card-radius);
+    box-shadow: var(--lm-shadow);
+    transition: transform 0.2s, box-shadow 0.2s;
+    overflow: hidden;
+    background: #fff;
+    border: 1px solid #D4E6F1;
+}
+.o_lm_kanban_card:hover {
+    transform: translateY(-3px);
+    box-shadow: var(--lm-shadow-hover);
+}
+
+/* En-tête de carte selon statut */
+.lm-card-header {
+    padding: 12px 14px 10px;
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+.lm-card-header.draft     { background: linear-gradient(135deg, #707B7C, #95A5A6); }
+.lm-card-header.pending   { background: linear-gradient(135deg, #B7770D, #D4AC0D); }
+.lm-card-header.approved  { background: linear-gradient(135deg, #1A5276, #2E86C1); }
+.lm-card-header.refused   { background: linear-gradient(135deg, #922B21, #E74C3C); }
+.lm-card-header.cancelled { background: linear-gradient(135deg, #424949, #717D7E); }
+
+.lm-card-body {
+    padding: 12px 14px;
+}
+.lm-card-info-row {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    font-size: 0.83rem;
+    color: #566573;
+    margin-bottom: 5px;
+}
+.lm-card-info-row i { width: 14px; color: var(--lm-accent); }
+
+/* Badge statut */
+.lm-status-badge {
+    display: inline-block;
+    padding: 2px 10px;
+    border-radius: 12px;
+    font-size: 0.72rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+.lm-status-badge.draft     { background: #E5E7E9; color: #424949; }
+.lm-status-badge.pending   { background: #FEF9E7; color: #7D6608; border: 1px solid #F7DC6F; }
+.lm-status-badge.approved  { background: #EAFAF1; color: #1E6820; border: 1px solid #82E0AA; }
+.lm-status-badge.refused   { background: #FDEDEC; color: #922B21; border: 1px solid #F1948A; }
+.lm-status-badge.cancelled { background: #F2F3F4; color: #5D6D7E; }
+
+/* ═══════════════════════════════════════════════════════════════════════
+   JAUGES / SOLDE DE CONGÉS (barre de progression)
+   ═══════════════════════════════════════════════════════════════════════ */
+
+.lm-progress-wrap {
+    margin: 6px 0;
+}
+.lm-progress-label {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.78rem;
+    color: #566573;
+    margin-bottom: 4px;
+}
+.lm-progress-bar-bg {
+    background: #D5D8DC;
+    border-radius: 6px;
+    height: 8px;
+    overflow: hidden;
+}
+.lm-progress-bar-fill {
+    height: 100%;
+    border-radius: 6px;
+    transition: width 0.5s ease;
+}
+.lm-progress-bar-fill.low    { background: var(--lm-success); }
+.lm-progress-bar-fill.medium { background: var(--lm-warning); }
+.lm-progress-bar-fill.high   { background: var(--lm-danger); }
+
+/* ═══════════════════════════════════════════════════════════════════════
+   TYPE DE CONGÉ — Cartes colorées
+   ═══════════════════════════════════════════════════════════════════════ */
+
+.lm-type-card {
+    border-radius: 10px;
+    padding: 16px;
+    background: #fff;
+    border-left: 5px solid var(--lm-accent);
+    box-shadow: var(--lm-shadow);
+    margin-bottom: 8px;
+    transition: transform 0.15s;
+}
+.lm-type-card:hover { transform: translateX(4px); }
+.lm-type-card .lm-type-name { font-weight: 700; color: var(--lm-primary); font-size: 1rem; }
+.lm-type-card .lm-type-meta { font-size: 0.8rem; color: #717D7E; margin-top: 4px; }
+
+/* ═══════════════════════════════════════════════════════════════════════
+   DASHBOARD — Tuiles KPI
+   ═══════════════════════════════════════════════════════════════════════ */
+
+.lm-kpi-tile {
+    border-radius: var(--lm-card-radius);
+    padding: 24px 20px;
+    color: #fff;
+    box-shadow: var(--lm-shadow);
+    transition: transform 0.2s;
+    cursor: pointer;
+    text-align: center;
+}
+.lm-kpi-tile:hover { transform: translateY(-3px); box-shadow: var(--lm-shadow-hover); }
+.lm-kpi-tile .lm-kpi-value  { font-size: 2.8rem; font-weight: 900; line-height: 1; }
+.lm-kpi-tile .lm-kpi-label  { font-size: 0.85rem; opacity: 0.88; margin-top: 6px; font-weight: 600; }
+.lm-kpi-tile .lm-kpi-icon   { font-size: 1.8rem; margin-bottom: 8px; opacity: 0.7; }
+
+.lm-tile-blue   { background: linear-gradient(135deg, #1B4F72, #2E86C1); }
+.lm-tile-green  { background: linear-gradient(135deg, #145A32, #1E8449); }
+.lm-tile-orange { background: linear-gradient(135deg, #784212, #D68910); }
+.lm-tile-red    { background: linear-gradient(135deg, #7B241C, #C0392B); }
+.lm-tile-purple { background: linear-gradient(135deg, #4A235A, #7D3C98); }
+.lm-tile-teal   { background: linear-gradient(135deg, #0E6655, #17A589); }
+
+/* ═══════════════════════════════════════════════════════════════════════
+   RAPPORT PDF — Attestation de congé
+   ═══════════════════════════════════════════════════════════════════════ */
+
+.lm-report-header {
+    background: linear-gradient(135deg, var(--lm-primary), var(--lm-accent));
+    color: white;
+    padding: 24px 28px;
+    border-radius: 8px 8px 0 0;
+    margin-bottom: 0;
+}
+.lm-report-header h2 { margin: 0; font-weight: 800; font-size: 1.4rem; }
+.lm-report-header .lm-report-sub { opacity: 0.8; font-size: 0.9rem; margin-top: 4px; }
+
+.lm-report-body { padding: 20px 28px; }
+
+.lm-report-section-title {
+    color: var(--lm-primary);
+    font-weight: 800;
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 0.07em;
+    border-bottom: 2px solid var(--lm-accent);
+    padding-bottom: 5px;
+    margin: 20px 0 12px;
+}
+.lm-report-field-label {
+    color: #7F8C8D;
+    font-size: 0.78rem;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    font-weight: 600;
+}
+.lm-report-field-value {
+    font-weight: 700;
+    color: #1C2833;
+    font-size: 0.92rem;
+}
+
+/* Stamp "Approuvé" sur le PDF */
+.lm-stamp {
+    border: 4px solid var(--lm-success);
+    color: var(--lm-success);
+    border-radius: 8px;
+    padding: 6px 20px;
+    font-size: 1.1rem;
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    display: inline-block;
+    transform: rotate(-8deg);
+    opacity: 0.85;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════
+   WIZARD POPUP — Amélioration de l'apparence
+   ═══════════════════════════════════════════════════════════════════════ */
+
+.o_dialog .modal-header {
+    background: linear-gradient(135deg, var(--lm-primary), var(--lm-accent));
+    color: #fff;
+}
+.o_dialog .modal-header .modal-title { color: #fff; font-weight: 700; }
+.o_dialog .modal-header .btn-close { filter: invert(1); }
+
+/* ═══════════════════════════════════════════════════════════════════════
+   CHAMPS GROUP LABELS
+   ═══════════════════════════════════════════════════════════════════════ */
+
+.o_form_view .o_group .o_wrap_label label {
+    color: #5D6D7E;
+    font-weight: 600;
+    font-size: 0.82rem;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════
+   ALLOCATION — Barre de solde dans la liste
+   ═══════════════════════════════════════════════════════════════════════ */
+
+.lm-allocation-ok      { color: var(--lm-success); font-weight: 700; }
+.lm-allocation-warning { color: var(--lm-warning); font-weight: 700; }
+.lm-allocation-empty   { color: var(--lm-danger);  font-weight: 700; }

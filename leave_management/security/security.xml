@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- Catégorie de sécurité du module -->
+        <record id="module_category_leave" model="ir.module.category">
+            <field name="name">Gestion des Congés</field>
+            <field name="description">Gestion des demandes de congé des employés</field>
+            <field name="sequence">20</field>
+        </record>
+
+        <!-- Groupe : Employé (peut créer ses propres demandes) -->
+        <record id="group_leave_employee" model="res.groups">
+            <field name="name">Employé</field>
+            <field name="category_id" ref="module_category_leave"/>
+            <field name="implied_ids" eval="[(4, ref('base.group_user'))]"/>
+            <field name="comment">Peut créer, soumettre et voir ses propres demandes de congé.</field>
+        </record>
+
+        <!-- Groupe : Manager RH (peut tout approuver) -->
+        <record id="group_leave_manager" model="res.groups">
+            <field name="name">Manager RH</field>
+            <field name="category_id" ref="module_category_leave"/>
+            <field name="implied_ids" eval="[(4, ref('group_leave_employee'))]"/>
+            <field name="users" eval="[(4, ref('base.user_admin'))]"/>
+            <field name="comment">Peut approuver, refuser et voir toutes les demandes de congé.</field>
+        </record>
+    </data>
+</odoo>

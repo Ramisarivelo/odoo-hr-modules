@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Vue du wizard de refus (référencée depuis leave_type_views.xml) -->
+    <!-- La vue est déjà déclarée dans leave_type_views.xml, ce fichier sert de placeholder -->
+</odoo>

@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="view_em_department_form" model="ir.ui.view">
+        <field name="name">em.department.form</field>
+        <field name="model">em.department</field>
+        <field name="arch" type="xml">
+            <form string="Département">
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button name="action_view_employees" type="object"
+                                class="oe_stat_button" icon="fa-users"
+                                attrs="{'invisible': [('employee_count', '=', 0)]}">
+                            <field name="employee_count" widget="statinfo" string="Effectif direct"/>
+                        </button>
+                        <button name="action_view_employees" type="object"
+                                class="oe_stat_button" icon="fa-users-o">
+                            <field name="total_employee_count" widget="statinfo" string="Total (sous-dép.)"/>
+                        </button>
+                    </div>
+                    <div class="oe_title">
+                        <label for="name" string="Département"/>
+                        <h1><field name="name" placeholder="Ex : Informatique"/></h1>
+                    </div>
+                    <group>
+                        <group string="Identification">
+                            <field name="code"/>
+                            <field name="parent_id"/>
+                            <field name="color" widget="color_picker"/>
+                            <field name="active" widget="boolean_toggle"/>
+                        </group>
+                        <group string="Responsable et budget">
+                            <field name="manager_id"/>
+                            <field name="total_salary" readonly="1"
+                                   groups="employee_management.group_em_manager"/>
+                        </group>
+                    </group>
+                    <group string="Description">
+                        <field name="description" nolabel="1"
+                               placeholder="Décrivez le rôle et les missions de ce département..."/>
+                    </group>
+                    <notebook>
+                        <page string="Sous-départements" name="children"
+                              attrs="{'invisible': [('child_ids', '=', [])]}">
+                            <field name="child_ids" readonly="1">
+                                <tree>
+                                    <field name="code"/>
+                                    <field name="name"/>
+                                    <field name="manager_id"/>
+                                    <field name="employee_count"/>
+                                </tree>
+                            </field>
+                        </page>
+                        <page string="Employés" name="employees">
+                            <field name="employee_ids" readonly="1">
+                                <tree>
+                                    <field name="employee_ref"/>
+                                    <field name="name"/>
+                                    <field name="job_position_id"/>
+                                    <field name="hiring_date"/>
+                                    <field name="state" widget="badge"
+                                           decoration-success="state == 'active'"
+                                           decoration-warning="state == 'suspended'"
+                                           decoration-danger="state == 'resigned'"
+                                           decoration-secondary="state == 'draft'"/>
+                                </tree>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids"/>
+                    <field name="activity_ids"/>
+                    <field name="message_ids"/>
+                </div>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_em_department_tree" model="ir.ui.view">
+        <field name="name">em.department.tree</field>
+        <field name="model">em.department</field>
+        <field name="arch" type="xml">
+            <tree string="Départements" decoration-muted="active == False">
+                <field name="code"/>
+                <field name="name"/>
+                <field name="parent_id" optional="show"/>
+                <field name="manager_id"/>
+                <field name="employee_count" string="Effectif direct"/>
+                <field name="total_employee_count" string="Total"/>
+                <field name="total_salary" string="Masse salariale (Ar)"
+                       groups="employee_management.group_em_manager" optional="show"/>
+                <field name="active" invisible="1"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_em_department_search" model="ir.ui.view">
+        <field name="name">em.department.search</field>
+        <field name="model">em.department</field>
+        <field name="arch" type="xml">
+            <search string="Rechercher un département">
+                <field name="name"/>
+                <field name="code"/>
+                <field name="manager_id"/>
+                <separator/>
+                <filter name="active"   string="Actifs"   domain="[('active', '=', True)]"/>
+                <filter name="archived" string="Archivés" domain="[('active', '=', False)]"/>
+                <group expand="0" string="Grouper par">
+                    <filter name="g_parent" string="Département parent" context="{'group_by': 'parent_id'}"/>
+                    <filter name="g_manager" string="Responsable" context="{'group_by': 'manager_id'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_em_department" model="ir.actions.act_window">
+        <field name="name">Départements</field>
+        <field name="res_model">em.department</field>
+        <field name="view_mode">tree,form</field>
+        <field name="search_view_id" ref="view_em_department_search"/>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">Créer votre premier département !</p>
+        </field>
+    </record>
+
+</odoo>

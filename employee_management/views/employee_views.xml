@@ -1,0 +1,335 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- ═══════════════════════════════════════════════════════════════ -->
+    <!--  EMPLOYEE FORM VIEW — Design amélioré                          -->
+    <!-- ═══════════════════════════════════════════════════════════════ -->
+
+    <record id="view_em_employee_form" model="ir.ui.view">
+        <field name="name">em.employee.form</field>
+        <field name="model">em.employee</field>
+        <field name="arch" type="xml">
+            <form string="Employé">
+                <header>
+                    <button name="action_activate" string="✅ Activer" type="object"
+                            class="btn-success"
+                            attrs="{'invisible': [('state', '=', 'active')]}"
+                            confirm="Confirmer l'activation de cet employé ?"/>
+                    <button name="action_suspend" string="⏸ Suspendre" type="object"
+                            class="btn-warning"
+                            attrs="{'invisible': [('state', 'in', ['draft', 'suspended', 'resigned'])]}"/>
+                    <button name="action_resign" string="🚪 Démission" type="object"
+                            class="btn-danger"
+                            attrs="{'invisible': [('state', 'in', ['draft', 'resigned'])]}"
+                            confirm="Marquer cet employé comme démissionnaire ?"/>
+                    <button name="action_reset_draft" string="🔄 Brouillon" type="object"
+                            attrs="{'invisible': [('state', '=', 'draft')]}"/>
+                    <button name="action_print_card" string="🖨️ Fiche PDF" type="object"
+                            class="btn-secondary"
+                            attrs="{'invisible': [('state', '=', 'draft')]}"/>
+                    <button name="action_transfer_wizard" string="🔄 Mutation" type="object"
+                            class="btn-secondary"
+                            attrs="{'invisible': [('state', '!=', 'active')]}"
+                            groups="employee_management.group_em_manager"/>
+                    <field name="state" widget="statusbar"
+                           statusbar_visible="draft,active,suspended,resigned"/>
+                </header>
+
+                <sheet>
+                    <!-- Alertes contextuelles -->
+                    <div class="em-alert-active mb-3" role="alert"
+                         attrs="{'invisible': [('state', '!=', 'active')]}">
+                        ✅ <strong>Employé actif</strong>
+                    </div>
+                    <div class="em-alert-suspended mb-3" role="alert"
+                         attrs="{'invisible': [('state', '!=', 'suspended')]}">
+                        ⚠️ <strong>Employé suspendu</strong> — Accès et activités en pause.
+                    </div>
+                    <div class="em-alert-resigned mb-3" role="alert"
+                         attrs="{'invisible': [('state', '!=', 'resigned')]}">
+                        🚪 <strong>Employé démissionnaire</strong> — Contrat terminé.
+                    </div>
+
+                    <!-- Smart Buttons -->
+                    <div class="oe_button_box" name="button_box">
+                        <button name="action_transfer_wizard" type="object"
+                                class="oe_stat_button" icon="fa-exchange"
+                                attrs="{'invisible': [('state', '!=', 'active')]}"
+                                groups="employee_management.group_em_manager">
+                            <div class="o_stat_info">
+                                <span class="o_stat_text">Mutation</span>
+                            </div>
+                        </button>
+                        <button name="%(action_em_employee)d" type="action"
+                                class="oe_stat_button" icon="fa-sitemap"
+                                context="{'search_default_manager_id': active_id}"
+                                attrs="{'invisible': [('subordinate_count', '=', 0)]}">
+                            <field name="subordinate_count" widget="statinfo" string="Équipe"/>
+                        </button>
+                    </div>
+
+                    <!-- En-tête avec photo et nom -->
+                    <div class="oe_title d-flex align-items-center gap-3">
+                        <div>
+                            <field name="image" widget="image" class="oe_avatar"
+                                   options="{'size': [128, 128]}"/>
+                        </div>
+                        <div class="flex-grow-1">
+                            <label for="name" string="Nom de l'employé"/>
+                            <h1>
+                                <field name="name" placeholder="Prénom et Nom"/>
+                            </h1>
+                            <div>
+                                <span class="em-ref-badge">
+                                    <field name="employee_ref" readonly="1"/>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Groupes principaux -->
+                    <group>
+                        <group string="📋 Informations personnelles">
+                            <field name="gender"/>
+                            <field name="date_of_birth"/>
+                            <field name="age" readonly="1"/>
+                            <field name="marital_status"/>
+                            <field name="children_count"/>
+                            <field name="nationality"/>
+                            <field name="cin"/>
+                            <field name="cin_date"/>
+                        </group>
+                        <group string="🏢 Informations professionnelles">
+                            <field name="department_id"/>
+                            <field name="job_position_id"/>
+                            <field name="manager_id"/>
+                            <field name="hiring_date"/>
+                            <field name="end_date"
+                                   attrs="{'invisible': [('contract_type', '=', 'cdi')]}"/>
+                            <field name="seniority" readonly="1"/>
+                            <field name="contract_type"/>
+                            <field name="work_location"/>
+                        </group>
+                    </group>
+
+                    <!-- Contact et salaire -->
+                    <group>
+                        <group string="📞 Contact">
+                            <field name="phone"/>
+                            <field name="mobile"/>
+                            <field name="email"/>
+                            <field name="email_personal"/>
+                        </group>
+                        <group string="💰 Rémunération"
+                               groups="employee_management.group_em_manager">
+                            <field name="salary"/>
+                            <field name="salary_net" readonly="1"
+                                   help="Estimation : brut × 77% (charges sociales ~23%)"/>
+                            <field name="bank_account"/>
+                        </group>
+                    </group>
+
+                    <notebook>
+                        <page string="📍 Adresse" name="address">
+                            <group>
+                                <field name="address" nolabel="1"
+                                       placeholder="Adresse complète : rue, quartier, ville..."/>
+                            </group>
+                        </page>
+                        <page string="🎯 Compétences" name="skills">
+                            <group>
+                                <field name="skills" nolabel="1"
+                                       placeholder="Listez les compétences, langues, certifications..."/>
+                            </group>
+                        </page>
+                        <page string="📝 Notes internes" name="notes"
+                              groups="employee_management.group_em_manager">
+                            <group>
+                                <field name="note" nolabel="1"
+                                       placeholder="Notes confidentielles (visibles uniquement par les managers)..."/>
+                            </group>
+                        </page>
+                    </notebook>
+                </sheet>
+
+                <div class="oe_chatter">
+                    <field name="message_follower_ids"/>
+                    <field name="activity_ids"/>
+                    <field name="message_ids"/>
+                </div>
+            </form>
+        </field>
+    </record>
+
+    <!-- ─── TREE VIEW ─────────────────────────────────────────────── -->
+    <record id="view_em_employee_tree" model="ir.ui.view">
+        <field name="name">em.employee.tree</field>
+        <field name="model">em.employee</field>
+        <field name="arch" type="xml">
+            <tree string="Employés"
+                  decoration-success="state == 'active'"
+                  decoration-warning="state == 'suspended'"
+                  decoration-danger="state == 'resigned'"
+                  decoration-muted="state == 'draft'"
+                  multi_edit="1">
+                <field name="employee_ref" string="Matricule" optional="show"/>
+                <field name="image" widget="image" class="o_list_record_avatar"
+                       options="{'size': [24, 24]}" optional="show"/>
+                <field name="name" string="Nom"/>
+                <field name="department_id" string="Département"/>
+                <field name="job_position_id" string="Poste"/>
+                <field name="contract_type" string="Contrat" optional="show"/>
+                <field name="hiring_date" string="Date d'embauche" optional="show"/>
+                <field name="seniority" string="Ancienneté (ans)" optional="show"/>
+                <field name="phone" string="Téléphone" optional="hide"/>
+                <field name="email" string="Email" optional="hide"/>
+                <field name="salary" string="Salaire (Ar)"
+                       groups="employee_management.group_em_manager" optional="show"/>
+                <field name="state" string="Statut" widget="badge"
+                       decoration-success="state == 'active'"
+                       decoration-warning="state == 'suspended'"
+                       decoration-danger="state == 'resigned'"
+                       decoration-secondary="state == 'draft'"/>
+                <!-- Actions rapides -->
+                <button name="action_activate" type="object" icon="fa-check-circle"
+                        title="Activer" class="text-success"
+                        attrs="{'invisible': [('state', '=', 'active')]}"
+                        groups="employee_management.group_em_manager"/>
+                <button name="action_print_card" type="object" icon="fa-print"
+                        title="Imprimer fiche"
+                        attrs="{'invisible': [('state', '=', 'draft')]}"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- ─── KANBAN VIEW ────────────────────────────────────────────── -->
+    <record id="view_em_employee_kanban" model="ir.ui.view">
+        <field name="name">em.employee.kanban</field>
+        <field name="model">em.employee</field>
+        <field name="arch" type="xml">
+            <kanban default_group_by="department_id"
+                    class="o_kanban_small_column"
+                    group_create="false">
+                <field name="name"/>
+                <field name="department_id"/>
+                <field name="job_position_id"/>
+                <field name="state"/>
+                <field name="image"/>
+                <field name="phone"/>
+                <field name="email"/>
+                <field name="employee_ref"/>
+                <field name="hiring_date"/>
+                <field name="color"/>
+                <templates>
+                    <t t-name="kanban-box">
+                        <div class="o_em_kanban_card oe_kanban_global_click">
+                            <!-- En-tête coloré -->
+                            <div class="em-card-header">
+                                <img t-if="record.image.raw_value"
+                                     t-att-src="kanban_image('em.employee', 'image', record.id.raw_value)"
+                                     class="em-avatar" alt="Photo"/>
+                                <div t-if="!record.image.raw_value"
+                                     class="em-avatar d-flex align-items-center justify-content-center"
+                                     style="font-size:1.3rem;">👤</div>
+                                <div class="em-name">
+                                    <field name="name"/>
+                                    <div style="font-size:0.72rem; opacity:0.75; font-weight:400;">
+                                        <field name="employee_ref"/>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- Corps de la carte -->
+                            <div class="em-card-body">
+                                <div class="em-info-row">
+                                    <i class="fa fa-briefcase"/>
+                                    <field name="job_position_id"/>
+                                </div>
+                                <div class="em-info-row">
+                                    <i class="fa fa-phone"/>
+                                    <field name="phone"/>
+                                </div>
+                                <div class="em-info-row">
+                                    <i class="fa fa-envelope"/>
+                                    <field name="email"/>
+                                </div>
+                                <div class="mt-2 d-flex justify-content-between align-items-center">
+                                    <span t-attf-class="em-badge #{record.state.raw_value}">
+                                        <field name="state"/>
+                                    </span>
+                                    <div class="o_kanban_record_bottom">
+                                        <div class="oe_kanban_bottom_right">
+                                            <field name="activity_ids" widget="kanban_activity"/>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
+
+    <!-- ─── SEARCH VIEW ────────────────────────────────────────────── -->
+    <record id="view_em_employee_search" model="ir.ui.view">
+        <field name="name">em.employee.search</field>
+        <field name="model">em.employee</field>
+        <field name="arch" type="xml">
+            <search string="Rechercher un employé">
+                <field name="name" string="Nom / Matricule" filter_domain="['|', ('name', 'ilike', self), ('employee_ref', 'ilike', self)]"/>
+                <field name="department_id"/>
+                <field name="job_position_id"/>
+                <field name="manager_id"/>
+                <field name="cin"/>
+                <separator/>
+                <filter name="f_active"    string="✅ Actifs"        domain="[('state', '=', 'active')]"/>
+                <filter name="f_draft"     string="📝 Brouillons"    domain="[('state', '=', 'draft')]"/>
+                <filter name="f_suspended" string="⏸ Suspendus"     domain="[('state', '=', 'suspended')]"/>
+                <filter name="f_resigned"  string="🚪 Démissionnaires" domain="[('state', '=', 'resigned')]"/>
+                <separator/>
+                <filter name="f_cdi"  string="CDI"  domain="[('contract_type', '=', 'cdi')]"/>
+                <filter name="f_cdd"  string="CDD"  domain="[('contract_type', '=', 'cdd')]"/>
+                <filter name="f_stage" string="Stage" domain="[('contract_type', '=', 'stage')]"/>
+                <separator/>
+                <filter name="f_no_manager" string="Sans manager"
+                        domain="[('manager_id', '=', False)]"/>
+                <filter name="f_recent" string="Embauché ce mois"
+                        domain="[('hiring_date', '&gt;=', (context_today()).strftime('%Y-%m-01'))]"/>
+                <group expand="1" string="Grouper par">
+                    <filter name="g_dept"     string="Département"    context="{'group_by': 'department_id'}"/>
+                    <filter name="g_job"      string="Poste"          context="{'group_by': 'job_position_id'}"/>
+                    <filter name="g_contract" string="Type contrat"   context="{'group_by': 'contract_type'}"/>
+                    <filter name="g_state"    string="Statut"         context="{'group_by': 'state'}"/>
+                    <filter name="g_manager"  string="Manager"        context="{'group_by': 'manager_id'}"/>
+                    <filter name="g_hiring"   string="Mois d'embauche" context="{'group_by': 'hiring_date:month'}"/>
+                    <filter name="g_location" string="Lieu de travail" context="{'group_by': 'work_location'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <!-- ─── ACTION ────────────────────────────────────────────────── -->
+    <record id="action_em_employee" model="ir.actions.act_window">
+        <field name="name">Employés</field>
+        <field name="res_model">em.employee</field>
+        <field name="view_mode">tree,kanban,form</field>
+        <field name="search_view_id" ref="view_em_employee_search"/>
+        <field name="context">{'search_default_f_active': 1}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">Ajouter votre premier employé !</p>
+            <p>Gérez l'ensemble de vos employés : informations personnelles, professionnelles, salaires et statuts.</p>
+        </field>
+    </record>
+
+    <!-- Action : Tous les employés (sans filtre) -->
+    <record id="action_em_employee_all" model="ir.actions.act_window">
+        <field name="name">Tous les employés</field>
+        <field name="res_model">em.employee</field>
+        <field name="view_mode">tree,kanban,form</field>
+        <field name="search_view_id" ref="view_em_employee_search"/>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">Aucun employé enregistré.</p>
+        </field>
+    </record>
+
+</odoo>

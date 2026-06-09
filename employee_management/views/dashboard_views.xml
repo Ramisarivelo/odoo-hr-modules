@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- ═══════════════════════════════════════════════════════════════ -->
+    <!--  DASHBOARD — Tableau de bord RH                                -->
+    <!-- ═══════════════════════════════════════════════════════════════ -->
+
+    <!-- Vue Pivot : Répartition employés par département et contrat -->
+    <record id="view_em_employee_pivot" model="ir.ui.view">
+        <field name="name">em.employee.pivot</field>
+        <field name="model">em.employee</field>
+        <field name="arch" type="xml">
+            <pivot string="Analyse RH" disable_linking="0">
+                <field name="department_id" type="row"/>
+                <field name="contract_type" type="col"/>
+                <field name="salary" type="measure" string="Masse salariale"/>
+            </pivot>
+        </field>
+    </record>
+
+    <!-- Vue Graph : Effectifs par département -->
+    <record id="view_em_employee_graph" model="ir.ui.view">
+        <field name="name">em.employee.graph</field>
+        <field name="model">em.employee</field>
+        <field name="arch" type="xml">
+            <graph string="Effectifs par département" type="bar" stacked="1">
+                <field name="department_id"/>
+                <field name="state" type="col"/>
+            </graph>
+        </field>
+    </record>
+
+    <!-- Action dashboard -->
+    <record id="action_em_dashboard" model="ir.actions.act_window">
+        <field name="name">Tableau de Bord RH</field>
+        <field name="res_model">em.employee</field>
+        <field name="view_mode">graph,pivot,tree</field>
+        <field name="context">{'search_default_f_active': 1}</field>
+        <field name="groups_id" eval="[(4, ref('employee_management.group_em_manager'))]"/>
+    </record>
+
+    <!-- Action : Stats par contrat -->
+    <record id="action_em_stats_contract" model="ir.actions.act_window">
+        <field name="name">Répartition par Contrat</field>
+        <field name="res_model">em.employee</field>
+        <field name="view_mode">graph,pivot</field>
+        <field name="context">{'group_by': 'contract_type', 'search_default_f_active': 1}</field>
+        <field name="groups_id" eval="[(4, ref('employee_management.group_em_manager'))]"/>
+    </record>
+
+</odoo>

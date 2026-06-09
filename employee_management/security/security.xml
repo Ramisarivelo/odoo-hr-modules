@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- ── Catégorie ── -->
+        <record id="module_category_em" model="ir.module.category">
+            <field name="name">Gestion des Employés</field>
+            <field name="description">Contrôle d'accès du module Employee Management</field>
+            <field name="sequence">15</field>
+        </record>
+
+        <!-- ── Groupe : Lecteur (consultation uniquement) ── -->
+        <record id="group_em_reader" model="res.groups">
+            <field name="name">Lecteur</field>
+            <field name="category_id" ref="module_category_em"/>
+            <field name="implied_ids" eval="[(4, ref('base.group_user'))]"/>
+            <field name="comment">Peut consulter les fiches employés sans modification.</field>
+        </record>
+
+        <!-- ── Groupe : Responsable RH (CRUD employés) ── -->
+        <record id="group_em_manager" model="res.groups">
+            <field name="name">Responsable RH</field>
+            <field name="category_id" ref="module_category_em"/>
+            <field name="implied_ids" eval="[(4, ref('group_em_reader'))]"/>
+            <field name="comment">Peut créer, modifier et archiver les employés.</field>
+        </record>
+
+        <!-- ── Groupe : Administrateur RH (tout faire y compris supprimer) ── -->
+        <record id="group_em_admin" model="res.groups">
+            <field name="name">Administrateur RH</field>
+            <field name="category_id" ref="module_category_em"/>
+            <field name="implied_ids" eval="[(4, ref('group_em_manager'))]"/>
+            <field name="users" eval="[(4, ref('base.user_admin'))]"/>
+            <field name="comment">Accès complet : suppression, configuration, rapports.</field>
+        </record>
+    </data>
+</odoo>

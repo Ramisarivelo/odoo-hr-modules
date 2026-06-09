@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- ═══════════════════════════════════════════════════════════════ -->
+    <!--  DASHBOARD (vue synthèse pour le manager)                      -->
+    <!-- ═══════════════════════════════════════════════════════════════ -->
+
+    <record id="view_lm_leave_request_pivot" model="ir.ui.view">
+        <field name="name">lm.leave.request.pivot</field>
+        <field name="model">lm.leave.request</field>
+        <field name="arch" type="xml">
+            <pivot string="Analyse des congés">
+                <field name="department_id" type="row"/>
+                <field name="leave_type_id" type="col"/>
+                <field name="number_of_days" type="measure"/>
+            </pivot>
+        </field>
+    </record>
+
+    <record id="view_lm_leave_request_graph" model="ir.ui.view">
+        <field name="name">lm.leave.request.graph</field>
+        <field name="model">lm.leave.request</field>
+        <field name="arch" type="xml">
+            <graph string="Analyse des congés" type="bar">
+                <field name="leave_type_id"/>
+                <field name="number_of_days" type="measure"/>
+            </graph>
+        </field>
+    </record>
+
+    <!-- Action avec vue pivot + graph -->
+    <record id="action_lm_leave_dashboard" model="ir.actions.act_window">
+        <field name="name">Tableau de Bord Congés</field>
+        <field name="res_model">lm.leave.request</field>
+        <field name="view_mode">graph,pivot,tree</field>
+        <field name="domain">[('state', '=', 'approved')]</field>
+        <field name="groups_id" eval="[(4, ref('leave_management.group_leave_manager'))]"/>
+    </record>
+
+</odoo>
